@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>تعديل منتج</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light p-5">
+    <div class="container bg-white p-4 rounded shadow col-md-8">
+        <h3>تعديل: <%= project.title %></h3>
+        <form action="/admin/update/<%= project.id %>" method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label>الاسم</label>
+                <input type="text" name="title" class="form-control" value="<%= project.title %>" required>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label>القسم</label>
+                    <select name="category" class="form-select">
+                        <option value="مطبخ" <%= project.category=='مطبخ'?'selected':'' %>>مطبخ</option>
+                        <option value="شباك" <%= project.category=='شباك'?'selected':'' %>>شباك</option>
+                        <option value="باب" <%= project.category=='باب'?'selected':'' %>>باب</option>
+                        <option value="واجهة" <%= project.category=='واجهة'?'selected':'' %>>واجهة</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>نوع القطاع</label>
+                    <input type="text" name="profile_type" class="form-control" value="<%= project.profile_type %>">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label>الوصف</label>
+                <textarea name="description" class="form-control"><%= project.description %></textarea>
+            </div>
+            <div class="mb-3">
+                <label>تغيير الصورة (اختياري)</label>
+                <input type="file" name="image" class="form-control">
+                <small>اتركها فارغة للاحتفاظ بالصورة القديمة</small>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">حفظ التعديلات</button>
+            <a href="/admin-secret-page" class="btn btn-secondary w-100 mt-2">إلغاء</a>
+        </form>
+    </div>
+</body>
+</html>
