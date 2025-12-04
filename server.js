@@ -77,24 +77,26 @@ app.get('/admin-panel', async (req, res) => {
     }
 });
 
-// دالة إعداد العلامة المائية (عشان نستخدمها في الإضافة والتعديل)
+// --- دالة العلامة المائية الجديدة (هادية وشفافة) ---
 const getWatermarkTransformation = () => {
     return [
-        { width: 1000, crop: "scale" }, // 1. توحيد حجم الصورة
+        { width: 1200, crop: "scale" }, // تكبير العرض قليلاً لتحسين دقة النص
         {
             overlay: {
                 font_family: "Arial",
-                font_size: 50,
+                font_size: 35,        // خط أصغر قليلاً (كان 50)
                 font_weight: "bold",
                 text: "الهندسية ميتال  01204224500"
             },
-            color: "#F59E0B", // لون أصفر (Amber)
-            background: "#000000", // خلفية سوداء
-            opacity: 70, // شفافية الخلفية
+            color: "#FFFFFF",      // لون أبيض
+            opacity: 50,           // شفافية 50% (نص شفاف)
+            // شيلنا الخلفية السوداء (background)
+            // إضافة ظل خفيف للنص عشان يبان لو الصورة بيضاء
+            effect: "shadow:5",    
             gravity: "south_east", // المكان: تحت يمين
-            x: 20, y: 20
+            x: 30, y: 30           // بعدناه شوية عن الحرف عشان يبقى شكله أشيك
         },
-        { flags: "layer_apply" } // <--- ده السطر السحري اللي كان ناقص (دمج الطبقات)
+        { flags: "layer_apply" }
     ];
 };
 
@@ -108,7 +110,7 @@ app.post('/add-project', upload.array('photos', 20), async (req, res) => {
     try {
         const uploadPromises = files.map(file => cloudinary.uploader.upload(file.path, { 
             folder: "alumetal_projects",
-            transformation: getWatermarkTransformation() // استخدام دالة العلامة المائية
+            transformation: getWatermarkTransformation()
         }));
         
         const uploadResults = await Promise.all(uploadPromises);
@@ -168,7 +170,7 @@ app.post('/update-project/:id', upload.array('photos', 20), async (req, res) => 
         if (files && files.length > 0) {
             const uploadPromises = files.map(file => cloudinary.uploader.upload(file.path, { 
                 folder: "alumetal_projects",
-                transformation: getWatermarkTransformation() // استخدام نفس العلامة المائية
+                transformation: getWatermarkTransformation()
             }));
             const uploadResults = await Promise.all(uploadPromises);
             files.forEach(file => fs.unlinkSync(file.path));
