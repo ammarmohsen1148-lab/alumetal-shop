@@ -97,7 +97,8 @@ app.post('/add-project', upload.array('photos', 20), async (req, res) => {
                         text: "الهندسية ميتال  01204224500"
                     },
                     color: "white",
-                    background: "rgb:000000:40", // التصحيح هنا: استخدمنا rgb بدلاً من black
+                    // التصحيح هنا: استخدمنا كود الهيكس المباشر للشفافية
+                    background: "#00000066", 
                     gravity: "south_east",
                     x: 20, y: 20
                 }
@@ -116,6 +117,8 @@ app.post('/add-project', upload.array('photos', 20), async (req, res) => {
 
         res.redirect('/admin-panel');
     } catch (err) {
+        // طباعة الخطأ بوضوح عشان نعرف لو حصل حاجة تانية
+        console.error(err);
         res.send("Error: " + err.message);
     }
 });
@@ -141,7 +144,7 @@ app.get('/edit-project/:id', async (req, res) => {
     }
 });
 
-// تحديث المشروع (تم تصحيح كود اللون)
+// تحديث المشروع (تم تصحيح كود اللون هنا أيضاً)
 app.post('/update-project/:id', upload.array('photos', 20), async (req, res) => {
     const { title, description, category, deleteImages } = req.body;
     const files = req.files;
@@ -171,7 +174,8 @@ app.post('/update-project/:id', upload.array('photos', 20), async (req, res) => 
                             text: "الهندسية ميتال  01204224500"
                         },
                         color: "white",
-                        background: "rgb:000000:40", // التصحيح هنا أيضاً
+                        // التصحيح هنا: استخدمنا كود الهيكس المباشر للشفافية
+                        background: "#00000066",
                         gravity: "south_east",
                         x: 20, y: 20
                     }
