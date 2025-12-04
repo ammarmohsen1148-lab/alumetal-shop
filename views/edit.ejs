@@ -13,7 +13,8 @@
     <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-lg border-t-4 border-blue-500">
         <h2 class="text-2xl font-bold mb-6 text-center">تعديل بيانات: <%= project.title %></h2>
         
-        <form action="/update-project/<%= project.id %>" method="POST">
+        <form action="/update-project/<%= project.id %>" method="POST" enctype="multipart/form-data">
+            
             <div class="mb-4">
                 <label class="block text-gray-700 font-bold mb-2">عنوان العمل</label>
                 <input type="text" name="title" value="<%= project.title %>" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none" required>
@@ -28,9 +29,21 @@
                 </select>
             </div>
 
-            <div class="mb-6">
+            <div class="mb-4">
                 <label class="block text-gray-700 font-bold mb-2">الوصف</label>
                 <textarea name="description" rows="4" class="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none"><%= project.description %></textarea>
+            </div>
+
+            <div class="mb-6 bg-gray-50 p-3 rounded border border-gray-200">
+                <label class="block text-gray-700 font-bold mb-2">تحديث الصور (اختياري)</label>
+                <p class="text-xs text-gray-500 mb-2">اتركها فارغة للاحتفاظ بالصور القديمة. إذا رفعت صور جديدة سيتم استبدال القديمة.</p>
+                
+                <div class="flex gap-2 mb-3 overflow-x-auto pb-2">
+                    <span class="text-xs self-center ml-2 font-bold text-gray-400">الصور الحالية:</span>
+                    <img src="<%= project.mainimage %>" class="w-10 h-10 object-cover rounded border">
+                </div>
+
+                <input type="file" name="photos" multiple class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200">
             </div>
 
             <div class="flex gap-3">

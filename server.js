@@ -125,15 +125,46 @@ app.get('/edit-project/:id', async (req, res) => {
     }
 });
 
-// حفظ التعديل (POST) - تعديل البيانات فقط بدون الصور حالياً للسهولة
-app.post('/update-project/:id', async (req, res) => {
+// حفظ التعديل (POST) - يدعم تعديل الصور الآن
+app.post('/update-project/:id', upload.array('photos', 10), async (req, res) => {
     const { title, description, category } = req.body;
+    const files = req.files;
+    const id = req.params.id;
+
     try {
-        await db.query("UPDATE projects SET title = $1, description = $2, category = $3 WHERE id = $4", 
-            [title, description, category, req.params.id]);
+        // الحالة الأولى: المستخدم رفع صور جديدة (عايز يغير الصور)
+        if (files && files.length > 0) {
+            
+            // 1. رفع الصور الجديدة
+            const uploadPromises = files.map(file => cloudinary.uploader.upload(file.path, { folder: "alumetal_projects" }));
+            const uploadResults = await Promise.all(uploadPromises);
+            
+            // 2. مسح الملفات المؤقتة
+            files.forEach(file => fs.unlinkSync(file.path));
+
+            // 3. تجهيز الروابط
+            const imageUrls = uploadResults.map(result => result.secure_url);
+            const mainImage = imageUrls[0];
+            const imagesJSON = JSON.stringify(imageUrls);
+
+            // 4. تحديث الكل في قاعدة البيانات
+            await db.query(
+                "UPDATE projects SET title = $1, description = $2, category = $3, images = $4, mainImage = $5 WHERE id = $6", 
+                [title, description, category, imagesJSON, mainImage, id]
+            );
+
+        } else {
+            // الحالة الثانية: المستخدم مرفعش صور (عايز يحدث الكلام بس)
+            await db.query(
+                "UPDATE projects SET title = $1, description = $2, category = $3 WHERE id = $4", 
+                [title, description, category, id]
+            );
+        }
+
         res.redirect('/admin-panel');
     } catch (err) {
-        res.send("Error updating");
+        console.error(err);
+        res.send("Error updating project: " + err.message);
     }
 });
 
