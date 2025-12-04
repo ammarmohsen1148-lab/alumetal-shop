@@ -84,9 +84,9 @@ const getWatermarkTransformation = () => {
         {
             overlay: {
                 font_family: "Arial",
-                font_size: 35,        // خط أصغر قليلاً (كان 50)
+                font_size: 50,        // خط أصغر قليلاً (كان 50)
                 font_weight: "bold",
-                text: "الهندسية ميتال  01204224500"
+                text: "الهندسية ميتال  012 0422 4500,010 6660 3323 010 6660 3323"
             },
             color: "#FFFFFF",      // لون أبيض
             opacity: 50,           // شفافية 50% (نص شفاف)
