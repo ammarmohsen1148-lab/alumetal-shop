@@ -77,7 +77,7 @@ app.get('/admin-panel', async (req, res) => {
     }
 });
 
-// إضافة مشروع (مع العلامة المائية)
+// إضافة مشروع (تم تصحيح كود اللون)
 app.post('/add-project', upload.array('photos', 20), async (req, res) => {
     const { title, description, category } = req.body;
     const files = req.files;
@@ -87,20 +87,19 @@ app.post('/add-project', upload.array('photos', 20), async (req, res) => {
     try {
         const uploadPromises = files.map(file => cloudinary.uploader.upload(file.path, { 
             folder: "alumetal_projects",
-            // --- إعدادات العلامة المائية ---
             transformation: [
-                { width: 1000, crop: "scale" }, // توحيد الحجم لضمان تناسق الخط
+                { width: 1000, crop: "scale" }, 
                 {
                     overlay: {
                         font_family: "Arial",
                         font_size: 40,
                         font_weight: "bold",
-                        text: "الهندسية ميتال  01204224500" // النص اللي هيتكتب
+                        text: "الهندسية ميتال  01204224500"
                     },
                     color: "white",
-                    background: "black:40", // خلفية سوداء شفافة بنسبة 40%
-                    gravity: "south_east",  // المكان: تحت يمين
-                    x: 20, y: 20            // هوامش من الحرف
+                    background: "rgb:000000:40", // التصحيح هنا: استخدمنا rgb بدلاً من black
+                    gravity: "south_east",
+                    x: 20, y: 20
                 }
             ]
         }));
@@ -142,7 +141,7 @@ app.get('/edit-project/:id', async (req, res) => {
     }
 });
 
-// تحديث المشروع (مع العلامة المائية للصور الجديدة)
+// تحديث المشروع (تم تصحيح كود اللون)
 app.post('/update-project/:id', upload.array('photos', 20), async (req, res) => {
     const { title, description, category, deleteImages } = req.body;
     const files = req.files;
@@ -162,7 +161,6 @@ app.post('/update-project/:id', upload.array('photos', 20), async (req, res) => 
         if (files && files.length > 0) {
             const uploadPromises = files.map(file => cloudinary.uploader.upload(file.path, { 
                 folder: "alumetal_projects",
-                // --- نفس إعدادات العلامة المائية هنا ---
                 transformation: [
                     { width: 1000, crop: "scale" },
                     {
@@ -173,7 +171,7 @@ app.post('/update-project/:id', upload.array('photos', 20), async (req, res) => 
                             text: "الهندسية ميتال  01204224500"
                         },
                         color: "white",
-                        background: "black:40",
+                        background: "rgb:000000:40", // التصحيح هنا أيضاً
                         gravity: "south_east",
                         x: 20, y: 20
                     }
