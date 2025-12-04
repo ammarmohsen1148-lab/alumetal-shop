@@ -76,7 +76,8 @@ app.get('/admin-panel', async (req, res) => {
         res.send("Error");
     }
 });
-// إضافة مشروع
+
+// إضافة مشروع (بدون علامة مائية)
 app.post('/add-project', upload.array('photos', 20), async (req, res) => {
     const { title, description, category } = req.body;
     const files = req.files;
@@ -84,9 +85,9 @@ app.post('/add-project', upload.array('photos', 20), async (req, res) => {
     if (!files || files.length === 0) return res.send("Please upload images");
 
     try {
+        // تم إزالة transformation من هنا
         const uploadPromises = files.map(file => cloudinary.uploader.upload(file.path, { 
-            folder: "alumetal_projects",
-            transformation: getWatermarkTransformation()
+            folder: "alumetal_projects"
         }));
         
         const uploadResults = await Promise.all(uploadPromises);
@@ -126,7 +127,7 @@ app.get('/edit-project/:id', async (req, res) => {
     }
 });
 
-// تحديث المشروع
+// تحديث المشروع (بدون علامة مائية للصور الجديدة)
 app.post('/update-project/:id', upload.array('photos', 20), async (req, res) => {
     const { title, description, category, deleteImages } = req.body;
     const files = req.files;
@@ -144,9 +145,9 @@ app.post('/update-project/:id', upload.array('photos', 20), async (req, res) => 
         }
 
         if (files && files.length > 0) {
+            // تم إزالة transformation من هنا أيضاً
             const uploadPromises = files.map(file => cloudinary.uploader.upload(file.path, { 
-                folder: "alumetal_projects",
-                transformation: getWatermarkTransformation()
+                folder: "alumetal_projects"
             }));
             const uploadResults = await Promise.all(uploadPromises);
             files.forEach(file => fs.unlinkSync(file.path));
