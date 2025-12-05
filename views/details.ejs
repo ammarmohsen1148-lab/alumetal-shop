@@ -26,10 +26,11 @@
         <div class="flex flex-col lg:flex-row gap-8">
             
             <div class="w-full lg:w-2/3 space-y-4">
-                <div class="relative w-full h-[300px] md:h-[500px] rounded-xl overflow-hidden shadow-lg border border-gray-200 group">
+                
+                <div class="relative w-full h-[300px] md:h-[500px] rounded-xl overflow-hidden shadow-lg border border-gray-200 group bg-black flex items-center justify-center">
                     
                     <img id="mainImg" src="<%= product.imagesList[0] %>" alt="<%= product.title %>" 
-                         class="w-full h-full object-cover transition-opacity duration-300 cursor-zoom-in z-0 relative">
+                         class="max-w-full max-h-full object-contain transition-opacity duration-300 cursor-zoom-in z-0 relative block mx-auto">
                     
                     <div class="absolute inset-0 bg-black/0 transition-all group-hover:bg-black/10 pointer-events-none z-10 flex items-center justify-center opacity-0 group-hover:opacity-100">
                          <span class="bg-slate-900/70 text-white px-4 py-2 rounded-full text-sm">
@@ -37,11 +38,11 @@
                          </span>
                     </div>
                     
-                    <button onclick="nextImage()" class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black/50 text-white p-3 rounded-full hover:bg-amber-500 transition cursor-pointer z-20">
+                    <button onclick="nextImage()" class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-slate-900/50 text-white p-3 rounded-full hover:bg-amber-500 transition cursor-pointer z-20">
                         <i class="fas fa-chevron-right text-xl"></i>
                     </button>
                     
-                    <button onclick="prevImage()" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black/50 text-white p-3 rounded-full hover:bg-amber-500 transition cursor-pointer z-20">
+                    <button onclick="prevImage()" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-slate-900/50 text-white p-3 rounded-full hover:bg-amber-500 transition cursor-pointer z-20">
                         <i class="fas fa-chevron-left text-xl"></i>
                     </button>
 
@@ -76,11 +77,10 @@
     </div>
 
     <script>
-        // 3. تشغيل مكتبة الزوم على الصورة الرئيسية
-        // المتغير ده هنخزن فيه الـ zoom عشان نحدثه لما نقلب الصورة
+        // إعدادات الزوم
         let zoom = mediumZoom('#mainImg', {
-            margin: 24, // هوامش حول الصورة عند التكبير
-            background: '#0f172a', // لون الخلفية عند التكبير (نفس لون النافبار)
+            margin: 0,
+            background: '#000000', // خلفية سوداء عند التكبير
             scrollOffset: 0,
         });
 
@@ -92,17 +92,14 @@
             const counter = document.getElementById('currentIndex');
             const thumbnails = document.querySelectorAll('.thumbnail');
 
-            // تحديث مصدر الصورة
             img.src = images[currentIdx];
             
-            // مهم جداً: لازم نقول لمكتبة الزوم إن الصورة اتغيرت عشان تعمل زوم على الجديدة
-            zoom.detach(); // فصل الزوم عن الصورة القديمة
-            zoom.attach(img); // ربطه بالصورة الجديدة
+            // تحديث الزوم للصورة الجديدة
+            zoom.detach();
+            zoom.attach(img);
             
-            // تحديث العداد
             counter.innerText = currentIdx + 1;
 
-            // تحديث إطار المصغرات
             thumbnails.forEach((thumb, idx) => {
                 if(idx === currentIdx) {
                     thumb.classList.add('border-amber-500');
